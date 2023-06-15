@@ -2,26 +2,40 @@
 // sayIt("Hello")("my")("name")("is")("Brian")(); // "Hello my name is Brian"
 // Each successive call should continue to build up the final string. A final call without any arguments should return the built up string.
 
-let accumStr;
-function sayIt(str){
-    // If str is undefined
-    if (str == undefined){
-        let temp = accumStr;
-        accumStr = undefined;
-        return temp;
+
+{
+    // FIRST SOLUTION
+    let accumStr;
+    function sayIt(str){
+        // If str is undefined
+        if (str == undefined){
+            let temp = accumStr;
+            accumStr = undefined;
+            return temp;
+        }
+        // For the first time
+        if (accumStr == undefined)
+            accumStr = str;
+        return function(nextStr){
+            if (nextStr != undefined)
+                accumStr += " " + nextStr;
+                return sayIt(nextStr);
+        }
     }
-    // For the first time
-    if (accumStr == undefined)
-        accumStr = str;
-    return function(nextStr){
-        if (nextStr != undefined)
-            accumStr += " " + nextStr;
-            return sayIt(nextStr);
-    }
+    console.log(sayIt("Hello")("my")("name")("is")("Biran")());
 }
 
-console.log(sayIt("Hello")("my")("name")("is")("Biran")());
-console.log(sayIt("Hello2")("my2")("name2")("is2")());
+{
+    // UPDATED CLEANER SOLUTION
+    function sayIt(str){
+        return function(nextStr){
+            if (!nextStr)
+                return str;
+            return sayIt(str + " " + nextStr);
+        }
+    }
+    console.log(sayIt("Hello")("my")("name")("is")("Biran")());
+}
 
 // OTHER SOLUTIONS
 
